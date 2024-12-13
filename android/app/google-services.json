@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "482575205002",
+    "firebase_url": "https://abiding-triode-442911-b8-default-rtdb.firebaseio.com",
+    "project_id": "abiding-triode-442911-b8",
+    "storage_bucket": "abiding-triode-442911-b8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482575205002:android:7417751ae341b6edad6373",
+        "android_client_info": {
+          "package_name": "com.android.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8JxjnabTdVBbgLpD_ej5L5MVoyw04wvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
