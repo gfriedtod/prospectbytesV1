@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ButtonComp extends StatelessWidget {
@@ -9,11 +8,13 @@ class ButtonComp extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.secondary = false,
+    this.isLoading = false,
   });
   final VoidCallback onPressed;
 
   IconData? icon;
   bool secondary;
+  bool? isLoading = false;
 
   final String title;
 
@@ -24,7 +25,10 @@ class ButtonComp extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor:  (!secondary) ? Colors.black : Colors.grey,
+              side: (!secondary)
+                  ? BorderSide.none
+                  : const BorderSide(color: Colors.black),
+              backgroundColor: (!secondary) ? Colors.black : Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               )),
@@ -32,19 +36,28 @@ class ButtonComp extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              (icon != null)
-                  ?  Icon(
-                      icon,
-                      color: Colors.white,
+              (isLoading == true)
+                  ? const SizedBox(
+                      width: 15,
+                      height: 15,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
                     )
-                  : const SizedBox.shrink(),
+                  : (icon != null)
+                      ? Icon(
+                          icon,
+                          color: (!secondary) ? Colors.white : Colors.black,
+                        )
+                      : const SizedBox.shrink(),
               const SizedBox(
                 width: 5,
               ),
               Text(
                 title,
                 style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold, color: Colors.white),
+                    fontWeight: FontWeight.bold,
+                    color: (!secondary) ? Colors.white : Colors.black),
               ),
             ],
           )),
