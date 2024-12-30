@@ -5,6 +5,7 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled6/model/prospect.dart';
+import 'package:untitled6/page/prospect_list_page.dart';
 import 'package:untitled6/services/image/image_cubit.dart';
 
 import '../components/button_comp.dart';
@@ -53,7 +54,7 @@ class AddProspectPageView extends StatelessWidget {
         title: Row(
           children: [
             Text(
-              'Add Prospect .',
+              'Edit Prospect .',
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold, fontSize: 25),
             ),
@@ -91,7 +92,8 @@ class AddProspectPageView extends StatelessWidget {
                           context
                               .read<ProspectBloc>()
                               .add(const ProspectEvent.started());
-                          Navigator.pop(context);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/home', (Route<dynamic> route) => false);
                         },
                         added: () {
                           RepositoryProvider.of<PageProvider>(context).page =
@@ -225,7 +227,7 @@ class AddProspectPageView extends StatelessWidget {
                                                 return state.maybeWhen(
                                                     initial: () {
                                                   return ButtonComp(
-                                                    title: 'Add Prospect',
+                                                    title: 'save',
                                                     onPressed: () async {
                                                       context
                                                           .read<ProspectBloc>()
@@ -238,7 +240,7 @@ class AddProspectPageView extends StatelessWidget {
                                                 }, loading: () {
                                                   return ButtonComp(
                                                     isLoading: true,
-                                                    title: 'Add Prospect',
+                                                    title: 'save',
                                                     onPressed: () async {},
                                                     icon: LucideIcons.plus,
                                                   );
@@ -266,7 +268,7 @@ class AddProspectPageView extends StatelessWidget {
                                                   );
                                                 }, success: (e, v) {
                                                   return ButtonComp(
-                                                    title: 'Add Prospect',
+                                                    title: 'save',
                                                     onPressed: () async {
                                                       context
                                                           .read<ProspectBloc>()
@@ -319,7 +321,7 @@ class AddProspectPageView extends StatelessWidget {
                                                 return state.maybeWhen(
                                                     initial: () {
                                                   return ButtonComp(
-                                                    title: 'Add Prospect',
+                                                    title: 'save',
                                                     onPressed: () async {
                                                       context
                                                           .read<ProspectBloc>()
@@ -332,7 +334,7 @@ class AddProspectPageView extends StatelessWidget {
                                                 }, loading: () {
                                                   return ButtonComp(
                                                     isLoading: true,
-                                                    title: 'Add Prospect',
+                                                    title: 'save',
                                                     onPressed: () async {},
                                                     icon: LucideIcons.plus,
                                                   );
@@ -360,7 +362,7 @@ class AddProspectPageView extends StatelessWidget {
                                                   );
                                                 }, success: (e, v) {
                                                   return ButtonComp(
-                                                    title: 'Add Prospect',
+                                                    title: 'save',
                                                     onPressed: () async {
                                                       context
                                                           .read<ProspectBloc>()

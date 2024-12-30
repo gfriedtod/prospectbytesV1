@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled6/model/prospect.dart';
 import 'package:untitled6/page/prospect_detail_page.dart';
 import 'package:untitled6/utils/page.dart';
@@ -31,8 +32,6 @@ class _ProspectListPageViewState extends State<ProspectListPageView> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     context.read<ProspectBloc>().add(const ProspectEvent.started());
-    const consumerKey = ValueKey('prospects');
-    print(ModalRoute.of(context)?.settings.name);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,9 +57,6 @@ class _ProspectListPageViewState extends State<ProspectListPageView> {
               listener: (context, state) {
                 state.maybeWhen(
                     orElse: () {
-                      print("runtime type:${context.widget.key.hashCode}");
-                      print("runtime two: ${consumerKey.hashCode}");
-
                       context
                           .read<ProspectBloc>()
                           .add(const ProspectEvent.started());
@@ -98,7 +94,9 @@ class _ProspectListPageViewState extends State<ProspectListPageView> {
                                 child: ListView.builder(
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
-                                      onTap: () {
+                                      onTap: () async {
+                                        SharedPreferences pref = await SharedPreferences.getInstance();
+                                        pref.setString('prospect', prospectToJson(prospects[index]).toString());
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(

@@ -22,60 +22,61 @@ class ProspectBloc extends Bloc<ProspectEvent, ProspectState> {
       : super(const ProspectState.initial()) {
     on<ProspectEvent>((event, emit) async {
       await event.map(
+        /// Started event : we fetch prospect data
+        started: (_) async {
+          emit(const ProspectState.loading());
+          final prospects = await _prospectRepository.getProspectList();
+          // final types = await _prospectTypesRepository.getProspectTypes();
+          emit(ProspectState.success(prospects, []));
+        },
 
-          /// Started event : we fetch prospect data
-          started: (_) async {
-        emit(const ProspectState.loading());
-        final prospects = await _prospectRepository.getProspectList();
-        // final types = await _prospectTypesRepository.getProspectTypes();
-        emit(ProspectState.success(prospects, []));
-      },
-
-          /// Add event : we add a prospect
-          add: (e) async {
-        emit(const ProspectState.loading());
-        String? url = ';';
-        if (e.file.path != '') {
-          url = await _imageRepository.uploadImage(e.file);
-        } else if (e.prospect.image == '') {
-          url =
-              'https://res.cloudinary.com/dbxeapu5q/image/upload/v1735389785/kyahvjgo8ovozyexdb8c.png';
-        } else {
-          url = e.prospect.image;
-        }
-
-        e.prospect.image = url!;
-        await _prospectRepository.saveProspect(e.prospect);
-
-        emit(const ProspectState.added());
-      },
-
-          /// Init event : we reset the state
-          init: (_) {
-        emit(const ProspectState.initial());
-      }, newUpdate: (_NewUpdate value) async {
-        emit(const ProspectState.loadingUpdate());
-        try {
+        /// Add event : we add a prospect
+        add: (e) async {
+          emit(const ProspectState.loading());
           String? url = '';
-          if (value.file.path != '') {
-            url = await _imageRepository.uploadImage(value.file);
-          } else if (value.prospect.image == '') {
+          if (e.file.path != '') {
+            url = await _imageRepository.uploadImage(e.file);
+          } else if (e.prospect.image == '') {
             url =
-                'https://res.cloudinary.com/dbxeapu5q/image/upload/v1735389785/kyahvjgo8ovozyexdb8c.png';
+                'https://res.cloudinary.com/dbxeapu5q/image/upload/v1735545926/logo_qd1qhm.png';
           } else {
-            url = value.prospect.image;
+            url = e.prospect.image;
           }
 
-          value.prospect.image = url!;
-          await _prospectRepository.updateProspect(value.prospect);
-          emit(const ProspectState.updated());
-        } on Exception catch (e) {
-          rethrow;
-        }
-      },
+          e.prospect.image = url!;
+          await _prospectRepository.saveProspect(e.prospect);
 
-      initUpdate: (_InitUpdate value) {
-        emit(const ProspectState.updateProspect());},
+          emit(const ProspectState.added());
+        },
+
+        /// Init event : we reset the state
+        init: (_) {
+          emit(const ProspectState.initial());
+        },
+        newUpdate: (_NewUpdate value) async {
+          emit(const ProspectState.loadingUpdate());
+          try {
+            String? url = '';
+            if (value.file.path != '') {
+              url = await _imageRepository.uploadImage(value.file);
+            } else if (value.prospect.image == '') {
+              url =
+                  'https://res.cloudinary.com/dbxeapu5q/image/upload/v1735545926/logo_qd1qhm.png';
+            } else {
+              url = value.prospect.image;
+            }
+
+            value.prospect.image = url!;
+            await _prospectRepository.updateProspect(value.prospect);
+            emit(const ProspectState.updated());
+          } on Exception catch (e) {
+            rethrow;
+          }
+        },
+
+        initUpdate: (_InitUpdate value) {
+          emit(const ProspectState.updateProspect());
+        },
       );
 
       /// Delete event : we delete a prospec);

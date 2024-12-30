@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     final ProspectRepository prospectRepository = ProspectRepository(instance);
     final ProspectTypesRepository prospectTypesRepository =
         ProspectTypesRepository(instance);
@@ -62,7 +63,10 @@ class MyApp extends StatelessWidget {
                     ..add(const ProspectEvent.started())),
             ],
             child: MaterialApp(
-              title: 'Flutter Demo',
+              initialRoute: '/',
+              routes: {
+                '/home': (context) => const ProspectListPageView(),
+              },
               theme: ThemeData(
                 useMaterial3: true,
               ),
@@ -153,4 +157,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
