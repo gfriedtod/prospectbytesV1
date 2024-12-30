@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:untitled6/page/add_prospect_page.dart';
+import 'package:untitled6/page/prospect_detail_page.dart';
 import 'package:untitled6/repository/image_repository.dart';
 import 'package:untitled6/repository/prospect_repository.dart';
 import 'package:untitled6/repository/prospect_types_repository.dart';
 import 'package:untitled6/services/prospect/prospect_bloc.dart';
+import 'package:untitled6/utils/page.dart';
 
 import 'firebase_options.dart';
 import 'page/prospect_list_page.dart';
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
     FlutterNativeSplash.remove();
     return MultiRepositoryProvider(
         providers: [
+          RepositoryProvider(create: (_) => PageProvider("/")),
           RepositoryProvider(create: (_) => prospectRepository),
           RepositoryProvider(create: (_) => prospectTypesRepository),
           RepositoryProvider(create: (_) => imageRepository),
@@ -149,3 +153,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+

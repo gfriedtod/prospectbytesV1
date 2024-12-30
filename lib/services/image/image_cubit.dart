@@ -9,7 +9,7 @@ part 'image_cubit.freezed.dart';
 
 class ImageCubit extends Cubit<ImageState> {
   final ImagePicker picker = ImagePicker();
-  ImageCubit() : super(const ImageState.initial());
+  ImageCubit() : super( ImageState.initial(File('')));
 
   loadImage() async {
     XFile? xFile = await picker.pickImage(source: ImageSource.camera);
