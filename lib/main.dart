@@ -1,17 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:untitled6/page/add_prospect_page.dart';
+import 'package:untitled6/page/prospect_detail_page.dart';
+import 'package:untitled6/repository/image_repository.dart';
 import 'package:untitled6/repository/prospect_repository.dart';
 import 'package:untitled6/repository/prospect_types_repository.dart';
 import 'package:untitled6/services/prospect/prospect_bloc.dart';
+import 'package:untitled6/utils/page.dart';
 
 import 'firebase_options.dart';
 import 'page/prospect_list_page.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -19,25 +28,45 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+const String cloudinary_url =
+    "cloudinary://284228243264668:YpELTPPxXsd4OCEsLynmEYHkMKE@dbxeapu5q";
+
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   FirebaseFirestore instance = FirebaseFirestore.instance;
 
+  Cloudinary cloudinary = Cloudinary.fromStringUrl(cloudinary_url);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    final ProspectRepository prospectRepository = ProspectRepository(instance);
+    final ProspectTypesRepository prospectTypesRepository =
+        ProspectTypesRepository(instance);
+    final ImageRepository imageRepository = ImageRepository(cloudinary);
+
+    FlutterNativeSplash.remove();
     return MultiRepositoryProvider(
         providers: [
-          RepositoryProvider(create: (_) => ProspectRepository(instance)),
-          RepositoryProvider(create: (_) => ProspectTypesRepository(instance)),
+          RepositoryProvider(create: (_) => PageProvider("/")),
+          RepositoryProvider(create: (_) => prospectRepository),
+          RepositoryProvider(create: (_) => prospectTypesRepository),
+          RepositoryProvider(create: (_) => imageRepository),
         ],
         child: MultiBlocProvider(
             providers: [
-              BlocProvider(create: (_) => ProspectBloc( RepositoryProvider.of<ProspectRepository>(context), RepositoryProvider.of<ProspectTypesRepository>(context))..add(const ProspectEvent.started())),
+              BlocProvider(
+                  create: (_) => ProspectBloc(prospectRepository,
+                      prospectTypesRepository, imageRepository)
+                    ..add(const ProspectEvent.started())),
             ],
             child: MaterialApp(
-              title: 'Flutter Demo',
+              initialRoute: '/',
+              routes: {
+                '/home': (context) => const ProspectListPageView(),
+              },
               theme: ThemeData(
                 useMaterial3: true,
               ),
@@ -67,6 +96,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+
+    void initState() {
+      super.initState();
+    }
   }
 
   @override
